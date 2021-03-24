@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const bodyparser = require('body-parser');
 
 const port = 3000;
 
@@ -46,8 +47,42 @@ app.get('/', (req, res) => {
     res.send("Estou no endereço raiz.");
 });*/
 
-app.use(function(req, res, next) {
-    console.log("Inicio!");
-    next(); 
+app.use(bodyparser.urlencoded({ extended: false}));
+app.use('/', express.static(__dirname + '/src'));
+
+app.use((req, res, next) => {
+  console.log("Início."); 
+  next();
+});
+
+const VerificarCamposObrigatorios = (req, res, next) => {
+  console.log("Verificar campos Obrigatórios.");   
+  
+  if ((req.body.txt_nome == "") || (req.body.txt_email == "") || (req.body.txt_comentario == "")) {
+    return res.status(201).json({ erro: "Os campos obrigatórios não foram preencher."});
+  }
+
+  let tempo_atual = Date.now();
+  let hoje = new Date(tempo_atual);
+  req.request_time = hoje.toUTCString();    
+  next();
+}
+
+app.post('/contato', VerificarCamposObrigatorios, (req, res) => {
+  console.log("Data: " + req.request_time);
+  console.log("Nome: " + req.body.nome);
+  console.log("E-mail: " + req.body.email);
+  console.log("Comentário: " + req.body.comentario);
+
+  res.redirect('/');
+});
+
+app.get('*', (req, res) => {
+  res.send("Página Inválido: 404");
+}); 
+
+app.use((req, res) => {
+    console.log("Fim."); 
+});
 
 app.listen(port, () => console.log(`Escutando na porta ${port}`));
