@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
     res.send("Estou no endereço raiz.");
 });*/
 
-app.use(bodyparser.urlencoded({extended: false}));
+app.use(bodyparser.urlencoded({ extended: false}));
 app.use('/', express.static(__dirname + '/src'));
 
 app.use((req, res, next) => {
@@ -55,8 +55,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const dataAtual = (req, res, next) => {
-  console.log("Data."); 
+const DataTime = (req, res, next) => {
+  console.log("Data Time.");  
 
   let tempo_atual = Date.now();
   let hoje = new Date(tempo_atual);
@@ -64,7 +64,7 @@ const dataAtual = (req, res, next) => {
   next();
 }
 
-app.post('/contato', dataAtual, (req, res) => {
+app.post('/', DataTime, (req, res) => {
   console.log("Data: " + req.request_time);
   console.log("Nome: " + req.body.nome);
   console.log("E-mail: " + req.body.email);
@@ -76,9 +76,5 @@ app.post('/contato', dataAtual, (req, res) => {
 app.get('*', (req, res) => {
   res.send("Página Inválido: 404");
 }); 
-
-app.use((req, res) => {
-    console.log("Fim."); 
-});
 
 app.listen(port, () => console.log(`Escutando na porta ${port}`));
