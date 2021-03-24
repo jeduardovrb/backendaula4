@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
     res.send("Estou no endereço raiz.");
 });*/
 
-app.use(bodyparser.urlencoded({ extended: false}));
+app.use(bodyparser.urlencoded({extended: false}));
 app.use('/', express.static(__dirname + '/src'));
 
 app.use((req, res, next) => {
@@ -55,12 +55,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const VerificarCamposObrigatorios = (req, res, next) => {
-  console.log("Verificar campos Obrigatórios.");   
-  
-  if ((req.body.txt_nome == "") || (req.body.txt_email == "") || (req.body.txt_comentario == "")) {
-    return res.status(201).json({ erro: "Os campos obrigatórios não foram preencher."});
-  }
+const dataAtual = (req, res, next) => {
+  console.log("Data."); 
 
   let tempo_atual = Date.now();
   let hoje = new Date(tempo_atual);
@@ -68,7 +64,7 @@ const VerificarCamposObrigatorios = (req, res, next) => {
   next();
 }
 
-app.post('/contato', VerificarCamposObrigatorios, (req, res) => {
+app.post('/contato', dataAtual, (req, res) => {
   console.log("Data: " + req.request_time);
   console.log("Nome: " + req.body.nome);
   console.log("E-mail: " + req.body.email);
