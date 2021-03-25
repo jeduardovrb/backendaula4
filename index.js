@@ -55,6 +55,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware é todo o tipo de função que está entre um pedido HTTP 
+// e a resposta final que o servidor envia de volta para o cliente.
+
 const DataTime = (req, res, next) => {
   console.log("Data Time.");  
 
@@ -63,6 +66,11 @@ const DataTime = (req, res, next) => {
   req.request_time = hoje.toUTCString();    
   next();
 }
+
+// post = O método HTTP para o qual a função de middleware é aplicada.
+// '/' = Caminho (rota) para o qual a função de middleware é aplicada.
+// A função de middleware.
+// next = Argumento de retorno de chamada para a função de middleware, chamado de "next" por convenção.
 
 app.post('/', DataTime, (req, res) => {
   console.log("Data: " + req.request_time);
